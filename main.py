@@ -43,14 +43,22 @@ class VKUser:
             max_photos_url = max(sizes, key=self.get_largest_photo)['url']
             self.download_photo(max_photos_url)
 
-    def download_photo(self, url):
+    def download_photo(self, url, filename):
         res = requests.get(url, stream=True)
-        filename = url.split('/')[-1]
         with open(filename, 'wb') as file:
             for chunk in res.iter_content(4096):
                 file.write(chunk)
 
+    def get_photos_name(self, file):
+        photo_likes = []
+        photo_date = []
+        filename = json.load(open(file))
+        for name in filename:
+            photo_likes.append(name['likes']['count'])
+            print(photo_likes)
+
 vk_client = VKUser(token, '5.131')
 vk_client.get_photos('552934290', 'profile')
-vk_client.largest_photo('response.json')
+# vk_client.largest_photo()
+vk_client.get_photos_name('response.json')
 
