@@ -45,7 +45,8 @@ class VKUser:
 
     def download_photo(self, url):
         res = requests.get(url, stream=True)
-        with open('photos.json', 'wb') as file:
+        filename = url.split('/')[-1]
+        with open(filename, 'wb') as file:
             for chunk in res.iter_content(4096):
                 file.write(chunk)
 
