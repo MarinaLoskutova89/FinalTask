@@ -1,9 +1,11 @@
 from pprint import pprint
 import requests
 import json
+from yadisk import YaDisk
 
 with open('token_vk_user.txt', 'r', encoding='utf-8') as file_object:
     token = file_object.read().strip()
+
 
 class VKUser:
     url = 'https://api.vk.com/method/'
@@ -55,7 +57,8 @@ class VKUser:
         filename = json.load(open(file))
         for name in filename:
             photo_likes.append(name['likes']['count'])
-            print(photo_likes)
+            photo_date.append(name['date'])
+            return
 
 vk_client = VKUser(token, '5.131')
 vk_client.get_photos('552934290', 'profile')
