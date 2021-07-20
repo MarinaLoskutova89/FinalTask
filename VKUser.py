@@ -1,6 +1,7 @@
 import requests
 import json
 
+
 class VKUser:
     url = 'https://api.vk.com/method/'
 

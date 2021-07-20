@@ -48,6 +48,7 @@ direct = '/test/Photo from VK'
 # if not os.path.exists(direct):
 #     y.mkdir(direct)
 
+
 for key, value in tqdm(photo.items()):
     time.sleep(0.5)
     res = requests.get(value, stream=True)
