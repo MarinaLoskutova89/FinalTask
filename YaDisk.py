@@ -1,7 +1,6 @@
-from yadisk import YaDisk
-from pprint import pprint
 import requests
-
+import time
+from tqdm import tqdm
 
 class YandexDisk:
 
@@ -14,22 +13,24 @@ class YandexDisk:
             'Authorization': 'OAuth {}'.format(self.token)
         }
 
-    def get_files_list(self):
-        files_url = 'https://cloud-api.yandex.net/v1/disk/resources/files'
+    def creat_folders(self,folder_name='Photo from VK'):
+        files_url = 'https://cloud-api.yandex.net/v1/disk/resources'
         headers = self.get_headers()
-        response = requests.get(files_url, headers=headers)
-        return response.json()
+        params = {"path": '/' + folder_name}
+        response = requests.put(files_url, headers=headers, params=params)
+        print(f'Creating folder "{folder_name}":' + str(response.status_code))
 
-    def _get_upload_link(self, disk_file_path):
+
+    def upload_files_to_disk(self, disk_file_path, photos):
+        self.creat_folders('Photo from VK')
         upload_url = "https://cloud-api.yandex.net/v1/disk/resources/upload"
         headers = self.get_headers()
-        params = {"path": disk_file_path, "overwrite": "true"}
-        response = requests.get(upload_url, headers=headers, params=params)
-        return response.json()
-
-    def upload_file_to_disk(self, disk_file_path, filename):
-        href = self._get_upload_link(disk_file_path=disk_file_path).get("href", "")
-        response = requests.put(href, data=open(filename, 'rb'))
-        response.raise_for_status()
-        if response.status_code == 201:
-            print("Success")
+        for key, value in tqdm(photos.items()):
+            time.sleep(0.5)
+            params = {"path": disk_file_path + '/' + key,
+                      "url": value
+                     }
+            response = requests.post(upload_url, headers=headers, params=params)
+            response.raise_for_status()
+            if response.status_code == 201:
+                print("Success")

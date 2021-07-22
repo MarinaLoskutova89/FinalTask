@@ -1,9 +1,5 @@
-import requests
 import json
-import os
-import yadisk
-import time
-from tqdm import tqdm
+import YaDisk
 import VKUser
 
 with open('token_vk_user.txt', 'r', encoding='utf-8') as file_object:
@@ -14,7 +10,7 @@ with open('token_yandex.txt', 'r', encoding='utf-8') as file_object:
 
 vk_client = VKUser.VKUser(token, '5.131')
 data = vk_client.get_photos('552934290', 'profile')
-y = yadisk.YaDisk(token=token_yandex)
+y = YaDisk.YandexDisk(token=token_yandex)
 
 def get_largest_photo(size_dict):
     if size_dict['width'] >= size_dict['height']:
@@ -41,20 +37,7 @@ for file_name in list:
         name = f'{another_name}.jpg'
         photo[name] = url
     photo_info.append({'file name': name, 'size': size})
-    with open('photo_info', 'w', encoding='utf-8') as file:
+    with open('photo_info.json', 'w', encoding='utf-8') as file:
         json.dump(photo_info, file, indent=2, ensure_ascii=False)
 
-direct = '/test/Photo from VK'
-# if not os.path.exists(direct):
-#     y.mkdir(direct)
-
-
-for key, value in tqdm(photo.items()):
-    time.sleep(0.5)
-    res = requests.get(value, stream=True)
-    data = res.content
-    # with open(f'/Photo from VK/{key}', 'wb') as file:
-    #     for chunk in res.iter_content(4096):
-    #         data = file.write(chunk)
-
-y.upload(direct, data)
+y.upload_files_to_disk('/Photo from VK', photo)
