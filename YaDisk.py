@@ -32,5 +32,5 @@ class YandexDisk:
                      }
             response = requests.post(upload_url, headers=headers, params=params)
             response.raise_for_status()
-            if response.status_code == 201:
-                print("Success")
+        if response.status_code == 202:
+            print("Success")
