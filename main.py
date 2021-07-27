@@ -12,12 +12,6 @@ vk_client = VKUser.VKUser(token, '5.131')
 data = vk_client.get_photos('552934290', 'profile')
 y = YaDisk.YandexDisk(token=token_yandex)
 
-def get_largest_photo(size_dict):
-    if size_dict['width'] >= size_dict['height']:
-        return size_dict['width']
-    else:
-        return size_dict['height']
-
 list = []
 for item in data['response']['items']:
     list.append({'likes': item['likes']['count'], 'date': item['date'],
@@ -28,8 +22,8 @@ photo_info = []
 for file_name in list:
     like = file_name['likes']
     name = f'{like}.jpg'
-    url = max(file_name['url'], key=get_largest_photo)['url']
-    size = max(file_name['url'], key=get_largest_photo)['type']
+    url = max(file_name['url'], key=lambda x: x['width'] * x['height'])['url']
+    size = max(file_name['url'], key=lambda x: x['width'] * x['height'])['type']
     if name not in photo.keys():
         photo[name] = url
     else:
