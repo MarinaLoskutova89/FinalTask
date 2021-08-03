@@ -21,6 +21,10 @@ def compare(item1, item2):
         return 1
     elif item1['width'] * item1['height'] == item2['width'] * item2['height'] and d[item1['type']] < d[item2['type']]:
         return -1
+    elif item1['width'] * item1['height'] != item2['width'] * item2['height'] and d[item1['type']] > d[item2['type']]:
+        return 1
+    elif item1['width'] * item1['height'] != item2['width'] * item2['height'] and d[item1['type']] < d[item2['type']]:
+        return -1
     else:
         return 0
 
@@ -40,6 +44,7 @@ for file_name in photo_list:
     name = f'{like}.jpg'
     url = items['url']
     size = items['type']
+    print(size)
     if name not in photo.keys():
         photo[name] = url
     else:
